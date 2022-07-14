@@ -6,7 +6,7 @@ from .App import App
 assert len( __package__ ) > 0, """
 The '__main__' module does not seem to have been run in the context of a
 runnable package ... did you forget to add the '-m' flag?
-Usage: python3 -m ocr_smart_meter_exporter
+Usage: python3 -m wordsearch
 """
 
 def main() -> None:
