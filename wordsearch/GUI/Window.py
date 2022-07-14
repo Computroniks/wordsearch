@@ -9,6 +9,7 @@ import webbrowser
 
 from ..__version__ import __version__, __copyright__, __license__
 from ..utils import getRecentFiles
+from .ControlSideBar import ControlSideBar
 
 class Window:
     def __init__(self, root: Tk) -> None:
@@ -23,8 +24,20 @@ class Window:
         :type root: Tk
         """
 
+        # Configure root
         self._root = root
         self._root.title("Word Search")
+        self._root.columnconfigure(0, weight=1)
+        self._root.rowconfigure(0, weight=1)
+
+        # Create main frame and configure
+        self._mainframe = ttk.Frame(self._root, padding="3 3 12 12")
+        self._mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+        self._mainframe.columnconfigure(0, weight=1)
+        self._mainframe.columnconfigure(1, weight=5)
+        self._mainframe.columnconfigure(2, weight=0)
+        self._mainframe.rowconfigure(0, weight=1)
+        self._control_sidebar = ControlSideBar(self._mainframe)
 
         self._dark_theme = StringVar(value=0)
         self._recent_files = getRecentFiles()
