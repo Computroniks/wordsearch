@@ -12,6 +12,17 @@ from ..utils import getRecentFiles
 
 class Window:
     def __init__(self, root: Tk) -> None:
+        """
+        __init__ Create instace of Window
+
+        Window represents the root window of the GUI although the root
+       be passed here first as to ensure that the App can access and
+       create events.
+
+        :param root: Root Tk instance
+        :type root: Tk
+        """
+
         self._root = root
         self._root.title("Word Search")
 
@@ -22,6 +33,13 @@ class Window:
         self._createMenu()
     
     def _createMenu(self) -> None:
+        """
+        _createMenu Create the menus
+
+        Adds a menubar to root before adding the appropriate cascade
+        windows.
+        """
+
         self._menubar = Menu(self._root)
         self._root["menu"] = self._menubar
 
@@ -65,12 +83,28 @@ class Window:
         menu_help.add_command(label="About", command=self._showInfo)
 
     def _showHelp(self) -> None:
+        """
+        _showHelp Show the help dialog
+
+        Currently not implemented
+        """
+
         messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501")
 
     def _showInfo(self) -> None:
+        """
+        _showInfo Show application info
+
+        Shows the current version and copyright information
+        """
+
         message = f"About\nWord Search\nVersion: {__version__}\n{__copyright__}\nLicence: {__license__}"
         messagebox.showinfo(message=message, title="About")
 
     def mainloop(self) -> None:
+        """
+        mainloop Start the tkinter main loop
+        """
+        
         self._root.mainloop()
     
