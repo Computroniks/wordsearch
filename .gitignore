@@ -1,6 +1,9 @@
 # SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 # SPDX-License-Identifier: CC0-1.0
 
+# Python files
+__pycache__
+
 # Editor files
 .vs
 .vscode
