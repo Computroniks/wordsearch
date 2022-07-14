@@ -66,12 +66,13 @@ class Window:
         menu_file.add_command(label="Load dictionary", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
         menu_file.add_command(label="Open word search", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
         menu_recent = Menu(menu_file)
+        menu_file.add_cascade(menu=menu_recent, label="Open recent")
+
         if len(self._recent_files) == 0:
             menu_recent.add_command(label="No recent files", state=DISABLED)
         else:
             for i in self._recent_files:
                 menu_recent.add_command(label=os.path.basename(i), command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
-        menu_file.add_cascade(menu=menu_recent, label="Open recent")
         
         menu_file.add_separator()
         menu_preferences = Menu(menu_file)
@@ -94,6 +95,7 @@ class Window:
         menu_help.add_command(label="View Licences", command=lambda :webbrowser.open("https://github.com/Computroniks/wordsearch#licence"))
         menu_help.add_separator()
         menu_help.add_command(label="About", command=self._showInfo)
+        menu_help.add_command(label="Log", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
 
     def _showHelp(self) -> None:
         """
