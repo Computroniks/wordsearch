@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2022 Sidings Media <packetblade@sidingsmedia.com>
+SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 SPDX-License-Identifier: CC-BY-SA-4.0
 -->
 
