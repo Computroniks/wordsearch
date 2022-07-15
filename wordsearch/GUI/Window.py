@@ -11,6 +11,7 @@ from ..__version__ import __version__, __copyright__, __license__
 from ..utils import getRecentFiles
 from .ControlSideBar import ControlSideBar
 from .WordList import WordList
+from .Board import Board
 
 class Window:
     def __init__(self, root: Tk) -> None:
@@ -40,6 +41,7 @@ class Window:
         self._mainframe.rowconfigure(0, weight=1)
         self._control_sidebar = ControlSideBar(self._mainframe)
         self._word_list = WordList(self._mainframe)
+        self._board = Board(self._mainframe)
 
         self._dark_theme = StringVar(value=0)
         self._recent_files = getRecentFiles()

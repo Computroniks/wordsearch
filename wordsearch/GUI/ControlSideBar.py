@@ -30,7 +30,7 @@ class ControlSideBar:
         self._public_key = StringVar()
         
         self._frame = ttk.Frame(parent)
-        self._frame.grid(column=3, row=0, sticky=(N, W, E, S))
+        self._frame.grid(column=2, row=0, sticky=(N, W, E, S))
         self._frame.columnconfigure(0, weight=0)
         self._frame.rowconfigure(0, weight=0)
         self._frame.rowconfigure(1, weight=0)
