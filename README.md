@@ -8,6 +8,11 @@ SPDX-License-Identifier: CC-BY-SA-4.0
 An entirely python based application that allows you to generate and
 play word searches alone or with your friends over a network.
 
+## External packages
+
+This project aims to depend on no packages that are not provided by
+default in the Python 3 installation.
+
 ## Licence
 This repo uses the [REUSE](https://reuse.software) standard in order to
 communicate the correct licence for the file. For those unfamiliar with
