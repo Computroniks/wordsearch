@@ -5,6 +5,8 @@ from tkinter import *
 from tkinter import ttk
 
 from .GUI import GUI
+from .Settings import Settings
+
 
 class App:
     def __init__(self) -> None:
@@ -16,6 +18,7 @@ class App:
         """
 
         # We create the root here to give us access to the event loop
+        self._settings = Settings()
         self._root = Tk()
         self._ui = GUI(self._root)
         self._registerEventHandlers()
@@ -42,3 +45,4 @@ class App:
         """
         
         self._ui.mainloop()
+        

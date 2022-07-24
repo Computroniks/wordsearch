@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/Computroniks/wordsearch/main/wordsearch/schemas/settings.json",
+  "type": "object",
+  "properties": {
+    "network": {
+      "type": "object",
+      "properties": {
+        "interface": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "pubKey": {
+              "type": "string"
+            },
+            "privkey": {
+              "type": "string"
+            }
+          },
+          "required": [],
+          "default": {
+              "port": 59210
+          }
+        },
+        "peer": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "pubKey": {
+              "type": "string"
+            }
+          },
+          "required": [],
+          "default": {
+              "port": 59211
+          }
+        },
+        "advanced": {
+          "type": "object",
+          "properties": {
+            "timeout": {
+              "type": "integer"
+            }
+          },
+          "required": ["timeout"],
+          "default": {
+              "timeout": 10
+          }
+        }
+      },
+      "required": ["interface", "peer", "advanced"]
+    },
+    "display": {
+      "type": "object",
+      "properties": {
+        "theme": {
+          "type": "string"
+        }
+      },
+      "required": ["theme"],
+      "default": {
+          "theme": "light"
+      }
+    },
+    "recent": {
+      "type": "array",
+      "items": {
+          "type": "string"
+      },
+      "default": []
+    }
+  },
+  "required": ["network", "display", "recent"]
+}
