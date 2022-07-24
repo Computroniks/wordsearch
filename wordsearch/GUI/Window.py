@@ -6,15 +6,17 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 import webbrowser
+from typing import Any
 
 from ..__version__ import __version__, __copyright__, __license__
 from ..utils import getRecentFiles
 from .ControlSideBar import ControlSideBar
 from .WordList import WordList
 from .Board import Board
+from ..Settings import Settings
 
 class Window:
-    def __init__(self, root: Tk) -> None:
+    def __init__(self, root: Tk, settings: Settings) -> None:
         """
         __init__ Create instace of Window
 
@@ -24,7 +26,11 @@ class Window:
 
         :param root: Root Tk instance
         :type root: Tk
+        :param settings: Instance of application settings
+        :type settings: Settings
         """
+
+        self._settings = settings
 
         # Configure root
         self._root = root
@@ -39,12 +45,17 @@ class Window:
         self._mainframe.columnconfigure(1, weight=1)
         self._mainframe.columnconfigure(2, weight=0)
         self._mainframe.rowconfigure(0, weight=1)
-        self._control_sidebar = ControlSideBar(self._mainframe)
-        self._word_list = WordList(self._mainframe)
-        self._board = Board(self._mainframe)
+        self._control_sidebar = ControlSideBar(self._mainframe, self._settings)
+        self._word_list = WordList(self._mainframe, self._settings)
+        self._board = Board(self._mainframe, self._settings)
 
-        self._dark_theme = StringVar(value=0)
-        self._recent_files = getRecentFiles()
+        self._dark_theme = StringVar(
+            value=self._settings.settings["display"]["theme"]
+        )
+        self._dark_theme.trace_add(
+            "write",
+            self._themeCB
+        )
 
         self._root.option_add("*tearOff", FALSE)
         self._createMenu()
@@ -72,16 +83,16 @@ class Window:
         menu_recent = Menu(menu_file)
         menu_file.add_cascade(menu=menu_recent, label="Open recent")
 
-        if len(self._recent_files) == 0:
+        if len(self._settings.settings["recent"]) == 0:
             menu_recent.add_command(label="No recent files", state=DISABLED)
         else:
-            for i in self._recent_files:
+            for i in self._settings.settings["recent"]:
                 menu_recent.add_command(label=os.path.basename(i), command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
         
         menu_file.add_separator()
         menu_preferences = Menu(menu_file)
         menu_file.add_cascade(menu=menu_preferences, label="Preferences")
-        menu_preferences.add_checkbutton(label="Use dark theme?", variable=self._dark_theme, onvalue=1, offvalue=0)
+        menu_preferences.add_checkbutton(label="Use dark theme?", variable=self._dark_theme, onvalue="dark", offvalue="light")
         menu_preferences.add_command(label="Advanced network settings", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
         menu_file.add_separator()
         menu_file.add_command(label="Quit", command=lambda :self._root.event_generate("<<Quit>>"))
@@ -119,6 +130,14 @@ class Window:
 
         message = f"About\nWord Search\nVersion: {__version__}\n{__copyright__}\nLicence: {__license__}"
         messagebox.showinfo(message=message, title="About")
+
+    def _themeCB(self, *args: Any) -> None:
+        """
+        _themeCB Callback for theme preference
+        """
+
+        self._settings.settings["display"]["theme"] = self._dark_theme.get()
+        self._settings.save()
 
     def mainloop(self) -> None:
         """

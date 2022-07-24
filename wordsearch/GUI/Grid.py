@@ -4,9 +4,11 @@
 from tkinter import *
 from tkinter import ttk
 
+from ..Settings import Settings
+
 
 class Grid(Canvas):
-    def __init__(self, parent, **kwargs) -> None:
+    def __init__(self, parent, settings: Settings, **kwargs) -> None:
         """
         __init__ Create instance of Grid
 
@@ -14,6 +16,10 @@ class Grid(Canvas):
 
         :param parent: Parent widget
         :type parent: any
+        :param settings: Instance of application settings
+        :type settings: Settings
         """ 
         super().__init__(parent, **kwargs)
+
+        self._settings = settings
     

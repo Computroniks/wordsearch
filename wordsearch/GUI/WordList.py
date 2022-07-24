@@ -1,13 +1,14 @@
 # SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 # SPDX-License-Identifier: MIT
 
-from lib2to3.pgen2.token import COLONEQUAL
 from tkinter import *
 from tkinter import ttk
 
+from ..Settings import Settings
+
 
 class WordList:
-    def __init__(self, parent: ttk.Frame) -> None:
+    def __init__(self, parent: ttk.Frame, settings: Settings) -> None:
         """
         __init__ Create the word list
 
@@ -15,7 +16,11 @@ class WordList:
 
         :param parent: Parent frame
         :type parent: ttk.Frame
+        :param settings: Instance of application settings
+        :type settings: Settings
         """
+
+        self._settings = settings
 
         self._frame = ttk.Frame(parent)
         self._frame.grid(column=0, row=0, sticky=(N, W, E, S))

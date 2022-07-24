@@ -20,7 +20,7 @@ class App:
         # We create the root here to give us access to the event loop
         self._settings = Settings()
         self._root = Tk()
-        self._ui = GUI(self._root)
+        self._ui = GUI(self._root, self._settings)
         self._registerEventHandlers()
 
     def _registerEventHandlers(self) -> None:
@@ -45,4 +45,3 @@ class App:
         """
         
         self._ui.mainloop()
-        

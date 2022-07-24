@@ -5,9 +5,11 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
+from ..Settings import Settings
+
 
 class ControlSideBar:
-    def __init__(self, parent: ttk.Frame) -> None:
+    def __init__(self, parent: ttk.Frame, settings: Settings) -> None:
         """
         __init__ Create the control sidebar
 
@@ -16,18 +18,97 @@ class ControlSideBar:
 
         :param parent: Parent frame
         :type parent: ttk.Frame
+        :param settings: Instance of application settings
+        :type settings: Settings
         """
 
+        self._settings = settings
+
+        # Puzzle settings
         self._width = IntVar(value=5)
         self._height = IntVar(value=5)
         self._words = IntVar(value=5)
-        self._interface_address = StringVar()
-        self._listen_port = IntVar(value=59210)
-        self._interface_public_key = StringVar()
-        self._interface_private_key = StringVar()
-        self._peer_address = StringVar()
-        self._peer_port = IntVar(value=59211)
-        self._public_key = StringVar()
+
+        # Interface settings
+        self._interface_address = StringVar(
+            value=self._settings.settings["network"]["interface"]["address"]
+        )
+        self._interface_address.trace_add(
+            "write",
+            lambda *args: self._entryCB(
+                "interface",
+                "address",
+                self._interface_address
+            )
+        )
+        self._listen_port = IntVar(
+            value=self._settings.settings["network"]["interface"]["port"]
+        )
+        self._listen_port.trace_add(
+            "write",
+            lambda *args: self._entryCB(
+                "interface",
+                "port",
+                self._listen_port
+            )
+        )
+        self._interface_public_key = StringVar(
+            value=self._settings.settings["network"]["interface"]["pubKey"]
+        )
+        self._interface_public_key.trace_add(
+            "write",
+            lambda *args: self._entryCB(
+                "interface",
+                "pubKey",
+                self._interface_public_key
+            )
+        )
+        self._interface_private_key = StringVar(
+            value=self._settings.settings["network"]["interface"]["privKey"]
+        )
+        self._interface_private_key.trace_add(
+            "write",
+            lambda *args: self._entryCB(
+                "interface",
+                "privKey",
+                self._interface_private_key
+            )
+        )
+
+        # Peer settings
+        self._peer_address = StringVar(
+            value=self._settings.settings["network"]["peer"]["address"]
+        )
+        self._peer_address.trace_add(
+            "write",
+            lambda *args: self._entryCB(
+                "peer",
+                "address",
+                self._peer_address
+            )
+        )
+        self._peer_port = IntVar(
+            value=self._settings.settings["network"]["peer"]["port"]
+        )
+        self._peer_port.trace_add(
+            "write",
+            lambda *args: self._entryCB(
+                "peer",
+                "port",
+                self._peer_port
+            )
+        )
+        self._peer_public_key = StringVar(
+            value=self._settings.settings["network"]["peer"]["pubKey"]
+        )
+        self._peer_public_key.trace_add(
+            "write",
+            lambda *args: self._entryCB(
+                "peer",
+                "pubKey",
+                self._peer_public_key
+            )
+        )
         
         self._frame = ttk.Frame(parent)
         self._frame.grid(column=2, row=0, sticky=(N, W, E, S))
@@ -88,7 +169,24 @@ class ControlSideBar:
         ttk.Spinbox(self._network_settings, textvariable=self._peer_port, from_=1, to=65535).grid(column=1, row=8, padx=5, pady=5, sticky=(E, W))
 
         ttk.Label(self._network_settings, text="Public Key").grid(column=0, row=9, sticky=(W))
-        ttk.Entry(self._network_settings, textvariable=self._public_key).grid(column=1, row=9, padx=5, pady=5, sticky=(E, W))
+        ttk.Entry(self._network_settings, textvariable=self._peer_public_key).grid(column=1, row=9, padx=5, pady=5, sticky=(E, W))
 
         ttk.Button(self._network_settings, text="Connect", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501")).grid(column=0, row=10, columnspan=2, sticky=(E, W))
 
+    def _entryCB(self, parent: str, prop: str, variable: Variable) -> None:
+        """
+        _entryCB Callback for entry widgets trace
+
+        Callback for write trace for entry widgets. Reads value of
+        widget, updates settings and writes changes to disk.
+
+        :param section: Name of parent setting
+        :type prop: str
+        :param prop: Name of property to update
+        :type prop: str
+        :param variable: Tkinter variable to read from
+        :type variable: tkinter.Variable
+        """
+
+        self._settings.settings["network"][parent][prop] = variable.get()
+        self._settings.save()
