@@ -18,13 +18,15 @@
             "pubKey": {
               "type": "string"
             },
-            "privkey": {
+            "privKey": {
               "type": "string"
             }
           },
           "required": [],
           "default": {
-              "port": 59210
+              "port": 59210,
+              "pubKey": "",
+              "privKey": ""
           }
         },
         "peer": {
@@ -42,7 +44,9 @@
           },
           "required": [],
           "default": {
-              "port": 59211
+              "address": "",
+              "port": 59211,
+              "pubKey": ""
           }
         },
         "advanced": {
