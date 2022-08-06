@@ -4,8 +4,10 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from tkinter.filedialog import askopenfilename
 
 from ..Settings import Settings
+from ..constants import HOME
 
 
 class ControlSideBar:
@@ -28,6 +30,7 @@ class ControlSideBar:
         self._width = IntVar(value=5)
         self._height = IntVar(value=5)
         self._words = IntVar(value=5)
+        self._word_list = StringVar()
 
         # Interface settings
         self._interface_address = StringVar(
@@ -133,7 +136,11 @@ class ControlSideBar:
         ttk.Label(self._puzzle_settings, text="Number of Words").grid(column=0, row=2, sticky=(W))
         ttk.Spinbox(self._puzzle_settings, textvariable=self._words, from_=5, to=20).grid(column=1, row=2, padx=5, pady=5, sticky=(E))
 
-        ttk.Button(self._puzzle_settings, text="Generate", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501")).grid(column=0, row=3, columnspan=2, sticky=(E, W))
+        ttk.Label(self._puzzle_settings, text="Word List").grid(column=0, row=3, sticky=(W))
+        ttk.Entry(self._puzzle_settings, textvariable=self._word_list).grid(column=0, row=4, padx=5, pady=5, sticky=(E,W))
+        ttk.Button(self._puzzle_settings, text="Select", command=self._selectWordList).grid(column=1, row=4, sticky=(E, W))
+
+        ttk.Button(self._puzzle_settings, text="Generate", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501")).grid(column=0, row=5, columnspan=2, sticky=(E, W))
 
         # Seperator for some visual aid
         ttk.Separator(self._frame, orient=HORIZONTAL).grid(column=1, row=1, columnspan=2, sticky=(E, W))
@@ -190,3 +197,33 @@ class ControlSideBar:
 
         self._settings.settings["network"][parent][prop] = variable.get()
         self._settings.save()
+
+    def _selectWordList(self) -> None:
+        """
+        _selectWordList Select the wordlist file
+
+        Selects the file that contains the word list
+        """
+        self._word_list.set(self._selectFile())
+
+    @staticmethod
+    def _selectFile() -> str:
+        """
+        _selectFile Select file
+
+        Open the TK select file dialog and return the result
+
+        :return: File path selected
+        :rtype: str
+        """
+
+        filetypes = (
+            ("All files", "*.*"),
+        )
+        filename = askopenfilename(
+            title="Open file",
+            initialdir=HOME,
+            filetypes=filetypes
+        )
+
+        return filename

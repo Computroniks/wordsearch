@@ -16,16 +16,19 @@ WIN32 = platform.system() == "Windows"
 """Is the current system running linux?"""
 LINUX = platform.system() == "Linux"
 
+"""Path to users home directory"""
+HOME = os.path.expanduser("~")
+
 """Base path for settings"""
 if MAC:
     BASE_PATH = os.path.join(
-        os.path.expanduser("~"),
+        HOME,
         "Library/Preferences/wordsearch"
     )
 elif WIN32:
     BASE_PATH = "%APPDATA%/wordsearch"
 else:
-    BASE_PATH = os.path.join(os.path.expanduser("~"), ".wordsearch")
+    BASE_PATH = os.path.join(HOME, ".wordsearch")
 
 """Settings filename"""
 SETTINGS_NAME = "settings.json"
