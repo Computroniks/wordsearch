@@ -152,13 +152,13 @@ class ControlSideBar:
         ttk.Label(self._network_settings, text="Listen Port").grid(column=0, row=2, sticky=(W))
         ttk.Spinbox(self._network_settings, textvariable=self._listen_port, from_=1, to=65535).grid(column=1, row=2, padx=5, pady=5, sticky=(E, W))
 
-        ttk.Label(self._network_settings, text="Public Key").grid(column=0, row=3, sticky=(W))
-        ttk.Entry(self._network_settings, textvariable=self._interface_public_key).grid(column=1, row=3, padx=5, pady=5, sticky=(E, W))
+        # ttk.Label(self._network_settings, text="Public Key").grid(column=0, row=3, sticky=(W))
+        # ttk.Entry(self._network_settings, textvariable=self._interface_public_key).grid(column=1, row=3, padx=5, pady=5, sticky=(E, W))
 
-        ttk.Label(self._network_settings, text="Private Key").grid(column=0, row=4, sticky=(W))
-        ttk.Entry(self._network_settings, textvariable=self._interface_private_key).grid(column=1, row=4, padx=5, pady=5, sticky=(E, W))
+        # ttk.Label(self._network_settings, text="Private Key").grid(column=0, row=4, sticky=(W))
+        # ttk.Entry(self._network_settings, textvariable=self._interface_private_key).grid(column=1, row=4, padx=5, pady=5, sticky=(E, W))
 
-        ttk.Button(self._network_settings, text="Generate Key Pair", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501")).grid(column=0, row=5, columnspan=2, sticky=(E, W))
+        # ttk.Button(self._network_settings, text="Generate Key Pair", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501")).grid(column=0, row=5, columnspan=2, sticky=(E, W))
 
         ttk.Label(self._network_settings, text="Peer").grid(column=0, row=6, columnspan=2, padx=5, pady=5, sticky=(W))
 
@@ -168,8 +168,8 @@ class ControlSideBar:
         ttk.Label(self._network_settings, text="Endpoint Port").grid(column=0, row=8, sticky=(W))
         ttk.Spinbox(self._network_settings, textvariable=self._peer_port, from_=1, to=65535).grid(column=1, row=8, padx=5, pady=5, sticky=(E, W))
 
-        ttk.Label(self._network_settings, text="Public Key").grid(column=0, row=9, sticky=(W))
-        ttk.Entry(self._network_settings, textvariable=self._peer_public_key).grid(column=1, row=9, padx=5, pady=5, sticky=(E, W))
+        # ttk.Label(self._network_settings, text="Public Key").grid(column=0, row=9, sticky=(W))
+        # ttk.Entry(self._network_settings, textvariable=self._peer_public_key).grid(column=1, row=9, padx=5, pady=5, sticky=(E, W))
 
         ttk.Button(self._network_settings, text="Connect", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501")).grid(column=0, row=10, columnspan=2, sticky=(E, W))
 
