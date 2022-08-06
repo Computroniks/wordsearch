@@ -4,7 +4,7 @@
 from tkinter import *
 from tkinter import ttk
 
-from ..Settings import Settings
+from wordsearch.Settings import Settings
 
 
 class WordList:

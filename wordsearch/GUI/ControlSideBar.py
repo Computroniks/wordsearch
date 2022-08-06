@@ -1,16 +1,16 @@
 # SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 # SPDX-License-Identifier: MIT
 
-from tkinter import *
-from tkinter import ttk
-from tkinter import messagebox
-from tkinter.filedialog import askopenfilename
 import os
+from tkinter import *
+from tkinter import messagebox, ttk
+from tkinter.filedialog import askopenfilename
 
-from ..Settings import Settings
-from ..constants import HOME
-from ..Game import Board
-from ..Game.Errors import PuzzleSizeError, OutOfWordsError, RetriesExceededError
+from wordsearch.constants import HOME
+from wordsearch.Game import Board
+from wordsearch.Game.Errors import (OutOfWordsError, PuzzleSizeError,
+                                    RetriesExceededError)
+from wordsearch.Settings import Settings
 
 
 class ControlSideBar:

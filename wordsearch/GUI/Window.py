@@ -2,19 +2,18 @@
 # SPDX-License-Identifier: MIT
 
 import os
-from tkinter import *
-from tkinter import ttk
-from tkinter import messagebox
 import webbrowser
+from tkinter import *
+from tkinter import messagebox, ttk
 from typing import Any
 
-from ..__version__ import __version__, __copyright__, __license__
-from ..utils import getRecentFiles
-from .ControlSideBar import ControlSideBar
-from .WordList import WordList
-from .Board import Board
-from ..Settings import Settings
-from ..Game import Board as GameBoard
+from wordsearch.__version__ import __copyright__, __license__, __version__
+from wordsearch.Game import Board as GameBoard
+from wordsearch.GUI.Board import Board
+from wordsearch.GUI.ControlSideBar import ControlSideBar
+from wordsearch.GUI.WordList import WordList
+from wordsearch.Settings import Settings
+from wordsearch.utils import getRecentFiles
 
 
 class Window:

@@ -1,10 +1,11 @@
 # SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 # SPDX-License-Identifier: MIT
 
-import socket
 import os
+import socket
 
-from .constants import BASE_PATH
+from wordsearch.constants import BASE_PATH
+
 
 def loadFile(path: str) -> list[str]:
     pass

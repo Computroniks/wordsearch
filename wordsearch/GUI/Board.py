@@ -4,8 +4,8 @@
 from tkinter import *
 from tkinter import ttk
 
-from .Grid import Grid
-from ..Settings import Settings
+from wordsearch.GUI.Grid import Grid
+from wordsearch.Settings import Settings
 
 
 class Board:

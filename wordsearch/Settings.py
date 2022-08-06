@@ -1,11 +1,11 @@
 # SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 # SPDX-License-Identifier: MIT
 
-import os
 import json
+import os
 
-from .constants import BASE_PATH, SETTINGS_NAME, SETTINGS_SCHEMA
-from .utils import getMachineIP, loadDefaultsFromSchema, checkBaseDir
+from wordsearch.constants import BASE_PATH, SETTINGS_NAME, SETTINGS_SCHEMA
+from wordsearch.utils import checkBaseDir, getMachineIP, loadDefaultsFromSchema
 
 
 class Settings:

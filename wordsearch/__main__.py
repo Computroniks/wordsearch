@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 # SPDX-License-Identifier: MIT
 
-from .App import App
+from wordsearch.App import App
 
 assert len( __package__ ) > 0, """
 The '__main__' module does not seem to have been run in the context of a

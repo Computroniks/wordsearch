@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 # SPDX-License-Identifier: MIT
 
-from .PuzzleSizeError import PuzzleSizeError
-from .OutOfWordsError import OutOfWordsError
-from .RetriesExceededError import RetriesExceededError
+from wordsearch.Game.Errors.OutOfWordsError import OutOfWordsError
+from wordsearch.Game.Errors.PuzzleSizeError import PuzzleSizeError
+from wordsearch.Game.Errors.RetriesExceededError import RetriesExceededError

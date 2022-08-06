@@ -1,11 +1,10 @@
 # SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 # SPDX-License-Identifier: MIT
 
-import platform
+import json
 import os
 import pkgutil
-import json
-
+import platform
 
 """Is the current system running macOS?"""
 MAC = platform.system() == "Darwin"

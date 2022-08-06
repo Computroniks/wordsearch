@@ -4,9 +4,10 @@
 from tkinter import *
 from tkinter import ttk
 
-from .GUI import GUI
-from .Settings import Settings
-from .Game import Board
+from wordsearch.Game import Board
+from wordsearch.GUI import GUI
+from wordsearch.Settings import Settings
+
 
 class App:
     def __init__(self) -> None:

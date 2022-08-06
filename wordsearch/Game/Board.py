@@ -4,9 +4,10 @@
 
 import random
 
-from .Errors import PuzzleSizeError, OutOfWordsError, RetriesExceededError
-from .Word import Word
-from ..constants import RETRIES
+from wordsearch.constants import RETRIES
+from wordsearch.Game.Errors import (OutOfWordsError, PuzzleSizeError,
+                                    RetriesExceededError)
+from wordsearch.Game.Word import Word
 
 
 class Board:
