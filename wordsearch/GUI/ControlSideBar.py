@@ -5,13 +5,16 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter.filedialog import askopenfilename
+import os
 
 from ..Settings import Settings
 from ..constants import HOME
+from ..Game import Board
+from ..Game.Errors import PuzzleSizeError, OutOfWordsError, RetriesExceededError
 
 
 class ControlSideBar:
-    def __init__(self, parent: ttk.Frame, settings: Settings) -> None:
+    def __init__(self, parent: ttk.Frame, settings: Settings, game: Board) -> None:
         """
         __init__ Create the control sidebar
 
@@ -22,9 +25,12 @@ class ControlSideBar:
         :type parent: ttk.Frame
         :param settings: Instance of application settings
         :type settings: Settings
+        :param game: Instance of game board
+        :type game: Game.Board
         """
 
         self._settings = settings
+        self._game = game
 
         # Puzzle settings
         self._width = IntVar(value=5)
@@ -134,13 +140,13 @@ class ControlSideBar:
         ttk.Spinbox(self._puzzle_settings, textvariable=self._height, from_=5, to=20).grid(column=1, row=1, padx=5, pady=5, sticky=(E))
 
         ttk.Label(self._puzzle_settings, text="Number of Words").grid(column=0, row=2, sticky=(W))
-        ttk.Spinbox(self._puzzle_settings, textvariable=self._words, from_=5, to=20).grid(column=1, row=2, padx=5, pady=5, sticky=(E))
+        ttk.Spinbox(self._puzzle_settings, textvariable=self._words, from_=1, to=100).grid(column=1, row=2, padx=5, pady=5, sticky=(E))
 
         ttk.Label(self._puzzle_settings, text="Word List").grid(column=0, row=3, sticky=(W))
         ttk.Entry(self._puzzle_settings, textvariable=self._word_list).grid(column=0, row=4, padx=5, pady=5, sticky=(E,W))
         ttk.Button(self._puzzle_settings, text="Select", command=self._selectWordList).grid(column=1, row=4, sticky=(E, W))
 
-        ttk.Button(self._puzzle_settings, text="Generate", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501")).grid(column=0, row=5, columnspan=2, sticky=(E, W))
+        ttk.Button(self._puzzle_settings, text="Generate", command=self._generate).grid(column=0, row=5, columnspan=2, sticky=(E, W))
 
         # Seperator for some visual aid
         ttk.Separator(self._frame, orient=HORIZONTAL).grid(column=1, row=1, columnspan=2, sticky=(E, W))
@@ -204,26 +210,104 @@ class ControlSideBar:
 
         Selects the file that contains the word list
         """
-        self._word_list.set(self._selectFile())
+
+        if path := self._settings.settings["recent-directories"]["dict"] == "":
+            path = HOME
+
+        self._word_list.set(self._selectFile(path))
+
+        # Save dir to open later
+        path = os.path.dirname(self._word_list.get())
+        self._settings.settings["recent-directories"]["dict"] = path
+        self._settings.save()
+
+    def _generate(self) -> None:
+        """
+        _generate Generate the game board
+
+        Validates game settings before generating the game board.
+        """
+
+        word_list = self._loadWords(self._word_list.get())
+        if word_list == []:
+            # An error occured
+            return
+
+        try:
+            self._game.generate(
+                self._width.get(),
+                self._height.get(),
+                word_list,
+                self._words.get()
+            )
+        except PuzzleSizeError:
+            messagebox.showerror(
+                title="Failed to generate puzzle",
+                message="Puzzle is too small for selected words"
+            )
+        except OutOfWordsError:
+            messagebox.showerror(
+                title="Failed to generate puzzle",
+                message="Ran out of words in dictionary"
+            )
+        except RetriesExceededError:
+            messagebox.showerror(
+                title="Failed to generate puzzle",
+                message="Failed to place words"
+            )
 
     @staticmethod
-    def _selectFile() -> str:
+    def _selectFile(path: str) -> str:
         """
         _selectFile Select file
 
         Open the TK select file dialog and return the result
 
+        :param path: Initial start path for explorer
+        :type path: str
         :return: File path selected
         :rtype: str
         """
 
         filetypes = (
-            ("All files", "*.*"),
+            ("Text files", "*.txt"),
+            ("All files", "*.*")
         )
         filename = askopenfilename(
             title="Open file",
-            initialdir=HOME,
+            initialdir=path,
             filetypes=filetypes
         )
 
         return filename
+
+    @staticmethod
+    def _loadWords(path: str) -> list[str]:
+        """
+        _loadWords Load the word list
+
+        Loads the word list from file, splitting by new lines and only
+        reading non blank lines. Also strips all white space
+
+        :param path: Path to dict file
+        :type path: str
+        :return: Word list
+        :rtype: list[str]
+        """
+
+        words: list[str] = []
+        try:
+            f = open(path, "r")
+        except FileNotFoundError:
+            messagebox.showerror(title="File not found", message="Word list file not found")
+            return []
+        else:
+            with f:
+                for line in f:
+                    line = line.replace(" ", "")
+                    line = line.replace("\n", "")
+                    line = line.replace("\r", "")
+                    if line != "":
+                        words.append(line)
+
+        return words

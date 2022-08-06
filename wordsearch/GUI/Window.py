@@ -14,9 +14,11 @@ from .ControlSideBar import ControlSideBar
 from .WordList import WordList
 from .Board import Board
 from ..Settings import Settings
+from ..Game import Board as GameBoard
+
 
 class Window:
-    def __init__(self, root: Tk, settings: Settings) -> None:
+    def __init__(self, root: Tk, settings: Settings, game: GameBoard) -> None:
         """
         __init__ Create instace of Window
 
@@ -28,9 +30,12 @@ class Window:
         :type root: Tk
         :param settings: Instance of application settings
         :type settings: Settings
+        :param game: Instance of game to use
+        :type game: Game.Board
         """
 
         self._settings = settings
+        self._game = game
 
         # Configure root
         self._root = root
@@ -45,7 +50,7 @@ class Window:
         self._mainframe.columnconfigure(1, weight=1)
         self._mainframe.columnconfigure(2, weight=0)
         self._mainframe.rowconfigure(0, weight=1)
-        self._control_sidebar = ControlSideBar(self._mainframe, self._settings)
+        self._control_sidebar = ControlSideBar(self._mainframe, self._settings, self._game)
         self._word_list = WordList(self._mainframe, self._settings)
         self._board = Board(self._mainframe, self._settings)
 
@@ -78,7 +83,7 @@ class Window:
         menu_file.add_command(label="Save", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
         menu_file.add_command(label="Save as", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
         menu_file.add_separator()
-        menu_file.add_command(label="Load dictionary", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
+        menu_file.add_command(label="Load dictionary", command=self._control_sidebar._selectWordList)
         menu_file.add_command(label="Open word search", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
         menu_recent = Menu(menu_file)
         menu_file.add_cascade(menu=menu_recent, label="Open recent")

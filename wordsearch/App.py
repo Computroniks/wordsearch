@@ -6,7 +6,7 @@ from tkinter import ttk
 
 from .GUI import GUI
 from .Settings import Settings
-
+from .Game import Board
 
 class App:
     def __init__(self) -> None:
@@ -19,8 +19,9 @@ class App:
 
         # We create the root here to give us access to the event loop
         self._settings = Settings()
+        self._game = Board()
         self._root = Tk()
-        self._ui = GUI(self._root, self._settings)
+        self._ui = GUI(self._root, self._settings, self._game)
         self._registerEventHandlers()
 
     def _registerEventHandlers(self) -> None:

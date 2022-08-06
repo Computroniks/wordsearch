@@ -36,3 +36,6 @@ SETTINGS_NAME = "settings.json"
 """Settings schema"""
 _data = pkgutil.get_data(__name__, "schemas/settings.json")
 SETTINGS_SCHEMA = json.loads(_data)
+
+"""Number of attempts made to place a word"""
+RETRIES = 5

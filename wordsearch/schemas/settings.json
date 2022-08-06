@@ -82,6 +82,18 @@
           "type": "string"
       },
       "default": []
+    },
+    "recent-directories": {
+        "type": "object",
+        "properties": {
+            "dict": {
+                "type": "string"
+            }
+        },
+        "required": ["dict"],
+        "default": {
+            "dict": ""
+        }
     }
   },
   "required": ["network", "display", "recent"]
