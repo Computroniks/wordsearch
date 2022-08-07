@@ -3,4 +3,16 @@
 
 
 class RetriesExceededError(Exception):
-    pass
+    def __init__(
+        self,
+        message: str = "Puzzle generation retries exceeded"
+    ) -> None:
+        """
+        __init__ Failed to generate puzzle
+
+        :param message: Message to output, defaults to "Puzzle
+            generation retries exceeded"
+        :type message: str, optional
+        """
+        
+        super().__init__(message)

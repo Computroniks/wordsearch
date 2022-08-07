@@ -22,11 +22,11 @@ class ControlSideBar:
         the UI
 
         :param parent: Parent frame
-        :type parent: ttk.Frame
+        :type parent: tkinter.ttk.Frame
         :param settings: Instance of application settings
-        :type settings: Settings
+        :type settings: wordsearch.Settings.Settings
         :param game: Instance of game board
-        :type game: Game.Board
+        :type game: wordsearch.Game.Board
         """
 
         self._settings = settings

@@ -7,8 +7,8 @@ from tkinter import *
 from tkinter import messagebox, ttk
 from typing import Any
 
+import wordsearch.Game
 from wordsearch.__version__ import __copyright__, __license__, __version__
-from wordsearch.Game import Board as GameBoard
 from wordsearch.GUI.Board import Board
 from wordsearch.GUI.ControlSideBar import ControlSideBar
 from wordsearch.GUI.WordList import WordList
@@ -17,7 +17,7 @@ from wordsearch.utils import getRecentFiles
 
 
 class Window:
-    def __init__(self, root: Tk, settings: Settings, game: GameBoard) -> None:
+    def __init__(self, root: Tk, settings: Settings, game: wordsearch.Game.Board) -> None:
         """
         __init__ Create instace of Window
 
@@ -28,9 +28,9 @@ class Window:
         :param root: Root Tk instance
         :type root: Tk
         :param settings: Instance of application settings
-        :type settings: Settings
+        :type settings: wordsearch.Settings.Settings
         :param game: Instance of game to use
-        :type game: Game.Board
+        :type game: wordsearch.Game.Board
         """
 
         self._settings = settings

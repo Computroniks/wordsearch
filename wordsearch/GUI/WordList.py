@@ -17,7 +17,7 @@ class WordList:
         :param parent: Parent frame
         :type parent: ttk.Frame
         :param settings: Instance of application settings
-        :type settings: Settings
+        :type settings: wordsearch.Settings.Settings
         """
 
         self._settings = settings

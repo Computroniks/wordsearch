@@ -17,7 +17,7 @@ class Grid(Canvas):
         :param parent: Parent widget
         :type parent: any
         :param settings: Instance of application settings
-        :type settings: Settings
+        :type settings: wordsearch.Settings.Settings
         """ 
         super().__init__(parent, **kwargs)
 
