@@ -6,35 +6,38 @@ import os
 import pkgutil
 import platform
 
-"""Is the current system running macOS?"""
 MAC = platform.system() == "Darwin"
+"""Is the current system running macOS?"""
 
-"""Is the current system running windows?"""
 WIN32 = platform.system() == "Windows"
+"""Is the current system running windows?"""
 
-"""Is the current system running linux?"""
 LINUX = platform.system() == "Linux"
+"""Is the current system running linux?"""
 
-"""Path to users home directory"""
 HOME = os.path.expanduser("~")
+"""Path to users home directory"""
 
-"""Base path for settings"""
 if MAC:
     BASE_PATH = os.path.join(
         HOME,
         "Library/Preferences/wordsearch"
     )
+    """Base path for settings"""
 elif WIN32:
     BASE_PATH = "%APPDATA%/wordsearch"
+    """Base path for settings"""
 else:
     BASE_PATH = os.path.join(HOME, ".wordsearch")
+    """Base path for settings"""
 
-"""Settings filename"""
+
 SETTINGS_NAME = "settings.json"
+"""Settings filename"""
 
-"""Settings schema"""
 _data = pkgutil.get_data(__name__, "schemas/settings.json")
 SETTINGS_SCHEMA = json.loads(_data)
+"""Settings schema"""
 
-"""Number of attempts made to place a word"""
 RETRIES = 5
+"""Number of attempts made to place a word"""
