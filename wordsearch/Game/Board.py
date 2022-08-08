@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Matthew Nickson <mnickson@sidingsmedia.com>
 # SPDX-License-Identifier: MIT
 
+import pickle
 import random
 
 from wordsearch.constants import RETRIES, ALPHABET
@@ -16,12 +17,14 @@ class Board:
         Board class represents the current game board
         """
 
-        self._width: int
-        self._height: int
-        self._word_count: int
+        self._width: int = 1
+        self._height: int = 1
+        self._word_count: int = 0
         self._dict: list[str] = []
         self._board: list[list[(Word, int)|None]] = []
         self._word_list: list[Word] = []
+        self.path: str = ""
+        self.loaded = False
 
     def generate(self, width: int, height: int, dict: list[str], words: int) -> None:
         """
@@ -57,6 +60,8 @@ class Board:
                 if self._board[i][j] is None:
                     self._board[i][j] = self._getChar()
 
+        self.path = ""
+        self.loaded = True
         self.printBoard()
 
     def _placeWord(self) -> None:
@@ -157,6 +162,44 @@ class Board:
                 else:
                     print(j[0].word[j[1]], end="")
             print()
+
+    def save(self, path: str) -> None:
+        """
+        save Save the board to disk
+
+        Saves the board and wordlist to disk
+
+        :param path: Path to save to
+        :type path: str
+        """
+
+        self.path = str(path)
+        data = [self._board, self._word_list, self._width, self._height]
+        with open(path, "wb") as f:
+            pickle.dump(data, f)
+
+    def load(self, path: str) -> None:
+        """
+        load Load puzzle from disk
+
+        Load the puzzle data from disk and parse it before storing it.
+
+        :param path: _description_
+        :type path: str
+        """
+        with open(path,"rb") as f:
+            data = pickle.load(f)
+        # Load to local variables first to check for exceptions.
+        # Prevents partial load of board
+        board = data[0]
+        word_list = data[1]
+        width = data[2]
+        height = data[3]
+        self._board = board
+        self._word_list = word_list
+        self._width = width
+        self._height = height
+        self.loaded = True
 
     @property
     def width(self) -> int:

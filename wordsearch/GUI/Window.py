@@ -5,6 +5,7 @@ import os
 import webbrowser
 from tkinter import *
 from tkinter import messagebox, ttk
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 from typing import Any
 
 import wordsearch.Game
@@ -13,6 +14,7 @@ from wordsearch.GUI.Board import Board
 from wordsearch.GUI.ControlSideBar import ControlSideBar
 from wordsearch.GUI.WordList import WordList
 from wordsearch.Settings import Settings
+from wordsearch.constants import HOME
 from wordsearch.utils import getRecentFiles
 
 
@@ -79,19 +81,15 @@ class Window:
         # File menu
         menu_file = Menu(self._menubar)
         self._menubar.add_cascade(menu=menu_file, label="File")
-        menu_file.add_command(label="Save", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
-        menu_file.add_command(label="Save as", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
+        menu_file.add_command(label="Save", command=self._save)
+        menu_file.add_command(label="Save as", command=self._saveAs)
         menu_file.add_separator()
         menu_file.add_command(label="Load dictionary", command=self._control_sidebar._selectWordList)
-        menu_file.add_command(label="Open word search", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
-        menu_recent = Menu(menu_file)
-        menu_file.add_cascade(menu=menu_recent, label="Open recent")
+        menu_file.add_command(label="Open word search", command=self._load)
+        self._menu_recent = Menu(menu_file)
+        menu_file.add_cascade(menu=self._menu_recent, label="Open recent")
 
-        if len(self._settings.settings["recent"]) == 0:
-            menu_recent.add_command(label="No recent files", state=DISABLED)
-        else:
-            for i in self._settings.settings["recent"]:
-                menu_recent.add_command(label=os.path.basename(i), command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
+        self._populateRecentMenu()
         
         menu_file.add_separator()
         menu_preferences = Menu(menu_file)
@@ -115,6 +113,22 @@ class Window:
         menu_help.add_separator()
         menu_help.add_command(label="About", command=self._showInfo)
         menu_help.add_command(label="Log", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
+
+    def _populateRecentMenu(self) -> None:
+        """
+        _populateRecentMenu Populate the recent puzzles menu
+        """
+
+        # Clear menu before loading new set
+        for i in range(5):
+            self._menu_recent.delete(0)
+
+        if len(self._settings.settings["recent"]) == 0:
+            self._menu_recent.add_command(label="No recent files", state=DISABLED)
+        else:
+            print(self._settings.settings["recent"])
+            for i in self._settings.settings["recent"]:
+                self._menu_recent.add_command(label=os.path.basename(i), command=lambda path=i:self._loadDirect(path))
 
     def _showHelp(self) -> None:
         """
@@ -142,6 +156,92 @@ class Window:
 
         self._settings.settings["display"]["theme"] = self._dark_theme.get()
         self._settings.save()
+    
+    def _save(self) -> None:
+        """
+        _save Save current board
+        """
+
+        # If the board hasn't been saved before or the save file doesn't
+        # exist just save as
+
+        if not self._game.loaded:
+            messagebox.showwarning(title="No board", message="No board to save")
+            return
+
+        if self._game.path == "" or not os.path.exists(self._game.path):
+            self._saveAs()
+            return
+
+        self._game.save(self._game.path)
+
+    def _saveAs(self) -> None:
+        """
+        _saveAs Save board as
+        """
+
+        if not self._game.loaded:
+            messagebox.showwarning(title="No board", message="No board to save")
+            return
+
+        filetypes = (
+            ("Puzzles", "*.puzzle"),
+            ("All files", "*.*")
+        )
+        path = asksaveasfilename(
+            title="Save As",
+            initialdir=HOME,
+            filetypes=filetypes
+        )
+
+        if not isinstance(path, str):
+            return
+
+        self._game.save(path)
+
+    def _load(self) -> None:
+        """
+        _load Load file from disk
+
+        Get user to select file the load it from disk
+        """
+
+        filetypes = (
+            ("Puzzles", "*.puzzle"),
+            ("All files", "*.*")
+        )
+        path = askopenfilename(
+            title="Open",
+            initialdir=HOME,
+            filetypes=filetypes
+        )
+
+        # Update recents list
+        if path not in self._settings.settings["recent"]:
+            self._settings.settings["recent"].append(path)
+            if len(self._settings.settings["recent"]) > 5:
+                self._settings.settings["recent"].pop(0)
+            self._settings.save()
+        self._populateRecentMenu()
+
+        self._loadDirect(path)
+
+    def _loadDirect(self, path: str) -> None:
+        """
+        _loadDirect Directly load the file
+
+        :param path: Path to file
+        :type path: str
+        """
+
+        try:
+            self._game.load(path)
+        except FileNotFoundError:
+            messagebox.showerror("Error", "File not found")
+        except:
+            messagebox.showerror("Error", "Failed to load save file")
+        else:
+            self._mainframe.event_generate("<<LOADED_GAMEBOARD>>")
 
     def mainloop(self) -> None:
         """
