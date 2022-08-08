@@ -41,3 +41,10 @@ SETTINGS_SCHEMA = json.loads(_data)
 
 RETRIES = 5
 """Number of attempts made to place a word"""
+
+ALPHABET = [
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+
+]
+"""Upper case alphabet"""

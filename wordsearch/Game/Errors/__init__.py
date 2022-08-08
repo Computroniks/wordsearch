@@ -4,3 +4,4 @@
 from wordsearch.Game.Errors.OutOfWordsError import OutOfWordsError
 from wordsearch.Game.Errors.PuzzleSizeError import PuzzleSizeError
 from wordsearch.Game.Errors.RetriesExceededError import RetriesExceededError
+from wordsearch.Game.Errors.OperationNotPermittedError import OperationNotPermittedError

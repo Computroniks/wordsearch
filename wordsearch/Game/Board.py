@@ -3,9 +3,8 @@
 
 import random
 
-from wordsearch.constants import RETRIES
-from wordsearch.Game.Errors import (OutOfWordsError, PuzzleSizeError,
-                                    RetriesExceededError)
+from wordsearch.constants import RETRIES, ALPHABET
+import wordsearch.Game.Errors
 from wordsearch.Game.Word import Word
 
 
@@ -21,7 +20,8 @@ class Board:
         self._height: int
         self._word_count: int
         self._dict: list[str] = []
-        self._board: list[list[tuple(Word, int)|None]] = []
+        self._board: list[list[(Word, int)|None]] = []
+        self._word_list: list[Word] = []
 
     def generate(self, width: int, height: int, dict: list[str], words: int) -> None:
         """
@@ -43,13 +43,21 @@ class Board:
         self._height = height
         self._word_count = words
         self._dict = dict
-
-        self._maxWordLen()
+        self._word_list = []
 
         self._board = [[None]*self._width for i in range(self._height)]        
-
+        
+        # Place words
         for i in range(self._word_count):
             self._placeWord()
+
+        # Fill empty spaces
+        for i in range(len(self._board)):
+            for j in range(len(self._board[i])):
+                if self._board[i][j] is None:
+                    self._board[i][j] = self._getChar()
+
+        self.printBoard()
 
     def _placeWord(self) -> None:
         """
@@ -98,28 +106,10 @@ class Board:
                     self._board[y+i][x] = (word, i)
                 else:
                     self._board[y][x+i] = (word, i)
-            return
-        raise RetriesExceededError
             
-
-    def _maxWordLen(self) -> None:
-        """
-        _maxWordLen Get max word length for specific puzzle size
-
-        Based upon the word count and length of the shortest side.
-        """
-
-        shortest_side = min(self._width, self._height)
-        min_word_len = (shortest_side // 2)
-        self._dict = [word for word in self._dict if len(word) <= min_word_len]
-
-        multiplier = self._word_count / 15 if self._word_count > 15 else 1
-        size = int(min_word_len * 2 * multiplier)
-
-        if size > shortest_side:
-            raise PuzzleSizeError
-
-        self.printBoard()
+            self._word_list.append(word)
+            return
+        raise wordsearch.Game.Errors.RetriesExceededError
 
     def _chooseWord(self) -> str:
         """
@@ -132,10 +122,26 @@ class Board:
         """ 
 
         if len(self._dict) < 1:
-            raise OutOfWordsError
+            raise wordsearch.Game.Errors.OutOfWordsError
 
         index = random.randint(0, len(self._dict)-1)
         return self._dict.pop(index)
+
+    def _getChar(self) -> str:
+        """
+        _getChar Get a random character
+
+        Gets a random character
+
+        :return: A random character
+        :rtype: str
+        """
+
+        # TODO: Make this return chars based on frequency in english
+        # language. I.e e more frequent than z
+
+        return random.choice(ALPHABET)
+
 
     def printBoard(self) -> None:
         """
@@ -146,9 +152,93 @@ class Board:
 
         for i in self._board:
             for j in i:
-                if j is None:
+                if not isinstance(j, tuple):
                     print("0", end="")
                 else:
-                    print(j[0]._word[j[1]], end="")
+                    print(j[0].word[j[1]], end="")
             print()
+
+    @property
+    def width(self) -> int:
+        """
+        width Width of board
+
+        :return: Width
+        :rtype: int
+        """
+
+        return self._width
+
+    @width.setter
+    def width(self, value) -> None:
+        """
+        width Set width of board
+
+        :raises wordsearch.Game.Errors.OperationNotPermittedError: Operation
+            not permitted
+        """
+        raise wordsearch.Game.Errors.OperationNotPermittedError
+
+    @property
+    def height(self) -> int:
+        """
+        height height of board
+
+        :return: Height
+        :rtype: int
+        """
+
+        return self._height
+
+    @height.setter
+    def height(self, value) -> None:
+        """
+        height Set height of board
+
+        :raises wordsearch.Game.Errors.OperationNotPermittedError: Operation
+            not permitted
+        """
+        raise wordsearch.Game.Errors.OperationNotPermittedError
+
+    @property
+    def board(self) -> list[list[(Word, int)]]:
+        """
+        board 2D array of board
+
+        :return: Board
+        :rtype: list[list[tuple(Word, int)|None]]
+        """
+
+        return self._board
+
+    @board.setter
+    def board(self, value) -> None:
+        """
+        board Set board
+
+        :raises wordsearch.Game.Errors.OperationNotPermittedError: Operation
+            not permitted
+        """
+        raise wordsearch.Game.Errors.OperationNotPermittedError
+
+    @property
+    def word_list(self) -> list[Word]:
+        """
+        word_list Array representing words to find
+
+        :return: Word list
+        :rtype: list[Word]
+        """
+
+        return self._word_list
+
+    @word_list.setter
+    def word_list(self, value) -> None:
+        """
+        word_list Set word list
+
+        :raises wordsearch.Game.Errors.OperationNotPermittedError: Operation
+            not permitted
+        """
+        raise wordsearch.Game.Errors.OperationNotPermittedError
     

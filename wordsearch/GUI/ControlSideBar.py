@@ -255,6 +255,8 @@ class ControlSideBar:
                 title="Failed to generate puzzle",
                 message="Failed to place words"
             )
+        else:
+            self._frame.event_generate("<<LOADED_GAMEBOARD>>")
 
     @staticmethod
     def _selectFile(path: str) -> str:

@@ -50,8 +50,8 @@ class Window:
         self._mainframe.columnconfigure(2, weight=0)
         self._mainframe.rowconfigure(0, weight=1)
         self._control_sidebar = ControlSideBar(self._mainframe, self._settings, self._game)
-        self._word_list = WordList(self._mainframe, self._settings)
-        self._board = Board(self._mainframe, self._settings)
+        self._word_list = WordList(self._mainframe, self._settings, self._game)
+        self._board = Board(self._mainframe, self._settings, self._game)
 
         self._dark_theme = StringVar(
             value=self._settings.settings["display"]["theme"]
