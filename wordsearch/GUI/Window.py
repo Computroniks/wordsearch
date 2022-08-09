@@ -126,7 +126,6 @@ class Window:
         if len(self._settings.settings["recent"]) == 0:
             self._menu_recent.add_command(label="No recent files", state=DISABLED)
         else:
-            print(self._settings.settings["recent"])
             for i in self._settings.settings["recent"]:
                 self._menu_recent.add_command(label=os.path.basename(i), command=lambda path=i:self._loadDirect(path))
 
