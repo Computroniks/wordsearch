@@ -54,18 +54,18 @@ class Grid(Canvas):
         bwidth = self._board.width
         bheight = self._board.height
 
-        # TODO: Center grid on canvas
-
         # 10px padding on all sides of grid
         width -= 20
         height -= 20
 
         # Get smallest scale factor
         side_length = min(width // bwidth, height // bheight)
-        y = 10
+        # Center grid
+        org_x = ((width - (side_length*bwidth)) // 2) + 10
+        y = ((height - (side_length*bheight)) // 2) + 10
 
         for i in self._board.board:
-            x = 10
+            x = org_x
             for j in i:
                 if isinstance(j, tuple):
                     letter = j[0].word[j[1]]
