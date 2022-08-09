@@ -91,19 +91,19 @@ class Window:
 
         self._populateRecentMenu()
         
-        menu_file.add_separator()
-        menu_preferences = Menu(menu_file)
-        menu_file.add_cascade(menu=menu_preferences, label="Preferences")
-        menu_preferences.add_checkbutton(label="Use dark theme?", variable=self._dark_theme, onvalue="dark", offvalue="light")
-        menu_preferences.add_command(label="Advanced network settings", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
+        # menu_file.add_separator()
+        # menu_preferences = Menu(menu_file)
+        # menu_file.add_cascade(menu=menu_preferences, label="Preferences")
+        # menu_preferences.add_checkbutton(label="Use dark theme?", variable=self._dark_theme, onvalue="dark", offvalue="light")
+        # menu_preferences.add_command(label="Advanced network settings", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
         menu_file.add_separator()
         menu_file.add_command(label="Quit", command=lambda :self._root.event_generate("<<Quit>>"))
 
         # Help
         menu_help = Menu(self._menubar, name="help")
         self._menubar.add_cascade(menu=menu_help, label="Help")
-        self._root.createcommand("::tk::mac::ShowHelp", self._showHelp) # macOS help menu
-        menu_help.add_command(label="Help", command=self._showHelp)
+        # self._root.createcommand("::tk::mac::ShowHelp", self._showHelp) # macOS help menu
+        # menu_help.add_command(label="Help", command=self._showHelp)
         menu_help.add_command(label="Online Documentation", command=lambda :webbrowser.open("https://github.com/Computroniks/wordsearch/wiki"))
         menu_help.add_command(label="Release notes", command=lambda :webbrowser.open("https://github.com/Computroniks/wordsearch/releases/"))
         menu_help.add_separator()
@@ -112,7 +112,7 @@ class Window:
         menu_help.add_command(label="View Licences", command=lambda :webbrowser.open("https://github.com/Computroniks/wordsearch#licence"))
         menu_help.add_separator()
         menu_help.add_command(label="About", command=self._showInfo)
-        menu_help.add_command(label="Log", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
+        # menu_help.add_command(label="Log", command=lambda :messagebox.showwarning(message="Sorry, this has not yet been implemented", title="Error 501"))
 
     def _populateRecentMenu(self) -> None:
         """

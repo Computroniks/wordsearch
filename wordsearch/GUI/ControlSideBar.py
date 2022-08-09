@@ -149,11 +149,11 @@ class ControlSideBar:
         ttk.Button(self._puzzle_settings, text="Generate", command=self._generate).grid(column=0, row=5, columnspan=2, sticky=(E, W))
 
         # Seperator for some visual aid
-        ttk.Separator(self._frame, orient=HORIZONTAL).grid(column=1, row=1, columnspan=2, sticky=(E, W))
+        # ttk.Separator(self._frame, orient=HORIZONTAL).grid(column=1, row=1, columnspan=2, sticky=(E, W))
 
         # Configure basic network settings
         self._network_settings = ttk.LabelFrame(self._frame, text="Network Settings", borderwidth=0)
-        self._network_settings.grid(column=1, row=2, pady=10, sticky=(N, W, E))
+        # self._network_settings.grid(column=1, row=2, pady=10, sticky=(N, W, E))
         self._network_settings.columnconfigure(0, weight=1)
         self._network_settings.columnconfigure(1, weight=1)
 
