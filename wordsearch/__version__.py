@@ -3,7 +3,7 @@
 
 __title__ = "Word Search"
 __description__ = "A simple word search generator with network gameplay"
-__version__ = "0.0.0"
+__version__ = "0.1.0"
 __url__ = "https://github.com/computroniks/wordsearch"
 __download_url__ = "https://github.com/computroniks/wordsearch/releases"
 __author__ = "Matthew Nickson"
