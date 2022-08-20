@@ -62,7 +62,6 @@ class Board:
 
         self.path = ""
         self.loaded = True
-        self.printBoard()
 
     def _placeWord(self) -> None:
         """
