@@ -96,14 +96,19 @@ class Board:
                     continue
             
             # Make sure we dont overlap any other words
+            overlap = False
             if direction:
                 for i in range(length):
                     if self._board[y+i][x] is not None:
-                        continue
+                        overlap = True
+                        break
             else:
                 for i in range(length):
                     if self._board[y][x+i] is not None:
-                        continue
+                        overlap = True
+                        break
+            if overlap:
+                continue
 
             # Board must be good to populate
             for i in range(length):
