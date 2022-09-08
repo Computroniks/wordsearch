@@ -37,6 +37,7 @@ class WordList:
         ttk.Label(self._frame, text="Words to find").grid(column=0, row=0, padx=5, pady=5, sticky=(W))
         self._word_list = Text(self._frame, width=30, state=DISABLED)
         self._word_list.grid(column=0, row=1, padx=5, pady=5, sticky=(N, W, S, E))
+        self._word_list.tag_config("strikethrough", overstrike=1)
 
         self._registerEvents()
 
@@ -46,6 +47,7 @@ class WordList:
         """
 
         self._frame.bind_all("<<LOADED_GAMEBOARD>>", self._loadWords, add='+')
+        self._frame.bind_all("<<FOUND_WORD>>", self._loadWords, add="+")
 
     def _loadWords(self, event: Event) -> None:
         """
@@ -59,7 +61,11 @@ class WordList:
 
         self._word_list.config(state=NORMAL)
         self._word_list.delete(1.0, END)
+
         for i in self._board.word_list:
-            self._word_list.insert(END, i.word)
+            if i.found:
+                self._word_list.insert(END, i.word, ("strikethrough"))
+            else:
+                self._word_list.insert(END, i.word)
             self._word_list.insert(END, "\n")
         self._word_list.config(state=DISABLED)

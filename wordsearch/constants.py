@@ -25,7 +25,8 @@ if MAC:
     )
     """Base path for settings"""
 elif WIN32:
-    BASE_PATH = "%APPDATA%/wordsearch"
+    appdata = os.getenv("APPDATA")
+    BASE_PATH = os.path.join(appdata, "wordsearch")
     """Base path for settings"""
 else:
     BASE_PATH = os.path.join(HOME, ".wordsearch")

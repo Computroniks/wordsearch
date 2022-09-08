@@ -3,7 +3,6 @@
 
 from tkinter import *
 from tkinter import ttk
-from wordsearch.Game.Word import Word
 
 from wordsearch.Settings import Settings
 import wordsearch.Game
@@ -35,8 +34,10 @@ class Grid(Canvas):
         self._board = board
         self._width = self.winfo_width()
         self._height = self.winfo_height()
+        self._selected_text = ""
 
         self.bind("<Configure>", self._resize)
+        self.bind("<Button-1>", self._onMouseClick)
 
     def draw(self) -> None:
         """
@@ -64,18 +65,19 @@ class Grid(Canvas):
         org_x = ((width - (side_length*bwidth)) // 2) + 10
         y = ((height - (side_length*bheight)) // 2) + 10
 
-        for i in self._board.board:
+        for i in range(len(self._board.board)):
             x = org_x
-            for j in i:
-                if isinstance(j, tuple):
-                    letter = j[0].word[j[1]]
+            for j in range(len(self._board.board[i])):
+                if self._board.board[i][j].found:
+                    self._drawSquare(self._board.board[i][j], x, y, side_length, "light green", f"{j},{i}")
+                elif self._board.board[i][j].selected:
+                    self._drawSquare(self._board.board[i][j], x, y, side_length, "yellow", f"{j},{i}")
                 else:
-                    letter = j
-                self._drawSquare(letter, x, y, side_length)
+                    self._drawSquare(self._board.board[i][j], x, y, side_length, "white", f"{j},{i}")    
                 x += side_length
             y += side_length
 
-    def _drawSquare(self, letter: str, x: int, y: int, length: int) -> None:
+    def _drawSquare(self, letter: str, x: int, y: int, length: int, fill: str, index: str) -> None:
         """
         _drawSquare Draw individual grid square
 
@@ -89,10 +91,14 @@ class Grid(Canvas):
         :type y: int
         :param length: Side length
         :type length: int
+        :param fill: Colour to fill rectangle with
+        :type fill: str
+        :param index: Index of char in board
+        :type index: str
         """
 
-        self.create_rectangle(x, y, x+length, y+length, outline="black")
-        self.create_text(x + (length//2), y + (length//2), text=letter.upper())
+        self.create_rectangle(x, y, x+length, y+length, outline="black", fill=fill, tags=index)
+        self.create_text(x + (length//2), y + (length//2), text=letter.upper(), tags=index)
 
     def _resize(self, event: Event) -> None:
         """
@@ -110,6 +116,85 @@ class Grid(Canvas):
         
         self.draw()
 
+    def _onMouseClick(self, event: Event) -> None:
+        """
+        _onMouseClick Callback for mouse button event
 
+        Callback for the left mouse button down event
 
+        :param event: Tkinter event
+        :type event: tkinter.Event
+        """
+
+        target = self.find_closest(event.x, event.y)
+
+        if target == ():
+            # User didn't click on anything
+            return
+        else: 
+            id = target[0]
+
+        x_str, y_str = self.gettags(id)[0].split(",")
+        x = int(x_str)
+        y = int(y_str)
+
+        if len(self._selected_text) != 0:
+            border_present = False
+
+            # BUG: Currently this allows user to select all boxes
+            # around a square, i.e can select rectangle instead of line.
+            # Implement some form of checking to make sure selection is
+            # in a line.
+
+            # Check that the selection is next to a previous one
+            borders = [
+                (x-1, y),   # Previous
+                (x+1, y),   # Next
+                (x, y-1),   # Above
+                (x, y+1),   # Below
+                (x-1, y-1), # Top left
+                (x+1, y-1), # Top right
+                (x-1, y+1), # Bottom left
+                (x+1, y+1), # Bottom right
+
+            ]
+
+            for i in borders:
+                try:
+                    if self._board.board[i[1]][i[0]].selected:
+                        border_present = True
+                        break
+                except IndexError:
+                    continue
+            
+            if not border_present:
+                return
+
+        self._board.board[y][x].select()
+        self._selected_text += self._board.board[y][x]
+
+        # Check if user found a word
+        found = False
+        for i in self._board.word_list:
+            if self._selected_text == i.word:
+                i.found = True
+                found = True
+                self.clear()
+                for i in self._board.board:
+                    for j in i:
+                        if j.selected:
+                            j.found = True
+                
+        self.draw()
+
+        # Must emit event after draw
+        if found:
+            self.event_generate("<<FOUND_WORD>>")
+
+    def clear(self) -> None:
+        """
+        clear Reset selected text
+        """
+        
+        self._selected_text = ""
     

@@ -3,6 +3,9 @@
 
 import wordsearch.Game.Errors
 
+# TODO: Make Word child of str like Char
+
+
 class Word:
     def __init__(self, word: str) -> None:
         """
@@ -15,6 +18,7 @@ class Word:
         """
         
         self._word = word
+        self._found = False
 
     def length(self) -> int:
         """
@@ -45,4 +49,29 @@ class Word:
             not permitted
         """
         raise wordsearch.Game.Errors.OperationNotPermittedError
+
+    @property
+    def found(self) -> bool:
+        """
+        found Has this word been found
+
+        Has the word represented by this class been found by the user.
+        True if found, else false.
+
+        :return: Has the word been found
+        :rtype: bool
+        """
+
+        return self._found
+
+    @found.setter
+    def found(self, value: bool) -> None:
+        """
+        found Setter for found
+
+        :param value: Value to set
+        :type value: bool
+        """
+        
+        self._found = bool(value)
     

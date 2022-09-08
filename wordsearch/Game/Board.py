@@ -7,6 +7,7 @@ import random
 from wordsearch.constants import RETRIES, ALPHABET
 import wordsearch.Game.Errors
 from wordsearch.Game.Word import Word
+from wordsearch.Game.Char import Char
 
 
 class Board:
@@ -21,7 +22,7 @@ class Board:
         self._height: int = 1
         self._word_count: int = 0
         self._dict: list[str] = []
-        self._board: list[list[(Word, int)|None]] = []
+        self._board: list[list[Char|None]] = []
         self._word_list: list[Word] = []
         self.path: str = ""
         self.loaded = False
@@ -58,11 +59,10 @@ class Board:
         for i in range(len(self._board)):
             for j in range(len(self._board[i])):
                 if self._board[i][j] is None:
-                    self._board[i][j] = self._getChar()
+                    self._board[i][j] = Char(self._getChar())
 
         self.path = ""
         self.loaded = True
-        self.printBoard()
 
     def _placeWord(self) -> None:
         """
@@ -96,21 +96,26 @@ class Board:
                     continue
             
             # Make sure we dont overlap any other words
+            overlap = False
             if direction:
                 for i in range(length):
                     if self._board[y+i][x] is not None:
-                        continue
+                        overlap = True
+                        break
             else:
                 for i in range(length):
                     if self._board[y][x+i] is not None:
-                        continue
+                        overlap = True
+                        break
+            if overlap:
+                continue
 
             # Board must be good to populate
             for i in range(length):
                 if direction:
-                    self._board[y+i][x] = (word, i)
+                    self._board[y+i][x] = Char(word.word[i])
                 else:
-                    self._board[y][x+i] = (word, i)
+                    self._board[y][x+i] = Char(word.word[i])
             
             self._word_list.append(word)
             return
@@ -132,7 +137,8 @@ class Board:
         index = random.randint(0, len(self._dict)-1)
         return self._dict.pop(index)
 
-    def _getChar(self) -> str:
+    @staticmethod
+    def _getChar() -> str:
         """
         _getChar Get a random character
 
@@ -200,6 +206,22 @@ class Board:
         self._width = width
         self._height = height
         self.loaded = True
+
+    def checkWin(self) -> bool:
+        """
+        checkWin Check if player has won
+
+        Checks board to see if it is in a winning state. I.e all words
+        have been found.
+
+        :return: Has the player won?
+        :rtype: bool
+        """
+        
+        for i in self._word_list:
+            if not i.found:
+                return False
+        return True
 
     @property
     def width(self) -> int:
